@@ -5,6 +5,16 @@ import random
 try:
     file_path = 'input/foods.xlsx'
     df = pd.read_excel(file_path)
+
+    # # Print the DataFrame
+    # print(df)
+    # print('')
+
+    # # Sort the DataFrame by 'column_name' in descending order
+    # sorted_df = df.sort_values(by='Rating', ascending=False)
+
+    # # Print the sorted DataFrame
+    # print(sorted_df)
 except:
     print('EXCEPTION => File cannot be opened:', file_path)
     exit()
@@ -34,6 +44,11 @@ try:
         for food_item, count in food_count.items():
             for _ in range(count):
                 menu.append(food_item)
+        # print(food_count)
+
+        # x = len(menu)
+        # if x != 0:
+        #     print('Items on menu: ' + str(x) + '\n' + str(menu))
 
         # Ensure the menu has 30 items for a month
         if len(menu) < 16:
@@ -43,6 +58,15 @@ try:
 
         # Shuffle the menu to randomize the order
         random.shuffle(menu)
+        # print(menu)
+
+        for item in menu:
+            if menu.count(item) > 1:
+                menu.remove(item)
+            while len(menu) < days_per_month:
+                menu.append(random.choice(df['Food'].tolist()))
+
+        #print(menu)
 
         # Create a calendar structure (6 weeks to accommodate 30 days)
         calendar = [['' for _ in range(7)] for _ in range(4)]
@@ -70,20 +94,19 @@ try:
 
         return calendar
 
-    try:
-        def print_calendar(calendar):
-            print("Mo     Tu       We       Th       Fr    Sa    Su")  # Adjusted for spacing
-            for week in calendar:
-                # Join food items or empty strings with appropriate formatting
-                week_display = ' | '.join(f"{item}" if item else "   " for item in week)
-                print(week_display)
+    def print_calendar(calendar):
+        print("Mo     Tu       We       Th       Fr    Sa    Su")  # Adjusted for spacing
+        for week in calendar:
+            # Join food items or empty strings with appropriate formatting
+            week_display = ' | '.join(f"{item}" if item else "   " for item in week)
+            print(week_display)
 
-        # Generate and display the calendar menu
-        calendar = create_calendar_menu(df)
-        print_calendar(calendar)      
-    except:
-        print('EXCEPTION => Error occurred in print_calendar()')
-        exit()     
+    # Generate and display the calendar menu
+    calendar = create_calendar_menu(df)
+    print_calendar(calendar)
+       
 except:
     print('EXCEPTION => Error occurred in create_calendar_menu()')
     exit()
+
+
